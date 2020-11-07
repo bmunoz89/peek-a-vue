@@ -1,33 +1,31 @@
 <template>
   <h1>Peek-a-Vue</h1>
   <section class="game-board">
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
-    <div class="card"></div>
+    <Card
+      v-for="(card, index) in cardList"
+      :key="`card-${index}`"
+      :value="card"
+    />
   </section>
 </template>
 
 <script lang="ts">
+import Card from '@/components/Card.vue'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'App',
-  components: {},
+  components: {
+    Card,
+  },
   setup() {
-    return {}
+    const cardList: number[] = []
+
+    for (let i = 0; i < 16; i++) {
+      cardList.push(i)
+    }
+
+    return { cardList }
   },
 })
 </script>
