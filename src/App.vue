@@ -7,20 +7,23 @@
       :position="card.position"
       :value="card.value"
       :visible="card.visible"
+      :matched="card.matched"
       @select-card="flipCard"
     />
   </section>
+  <h2>{{ status }}</h2>
 </template>
 
 <script lang="ts">
 import type { ISelectCardPayload } from '@/components/Card.vue'
 import Card from '@/components/Card.vue'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 
 interface ICard {
   position: number,
   value: number,
   visible?: boolean,
+  matched?: boolean,
 }
 
 export default defineComponent({
@@ -30,6 +33,8 @@ export default defineComponent({
   },
   setup() {
     const cardList = ref<ICard[]>([])
+    const userSelection = ref<ISelectCardPayload[]>([])
+    const status = ref<string>('')
 
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
@@ -39,10 +44,35 @@ export default defineComponent({
     }
 
     const flipCard = (payload: ISelectCardPayload) => {
-      cardList.value[payload.position].visible = !cardList.value[payload.position].visible
+      cardList.value[payload.position].visible = true
+
+      if (userSelection.value[0])
+        userSelection.value[1] = payload
+      else
+        userSelection.value[0] = payload
     }
 
-    return { cardList, flipCard }
+    watch(userSelection, (currentValue) => {
+      if (currentValue.length !== 2) return
+
+      const cardOne = currentValue[0]
+      const cardTwo = currentValue[1]
+      const matched = cardOne.faceValue === cardTwo.faceValue
+
+      cardList.value[cardOne.position].matched = matched
+      cardList.value[cardTwo.position].matched = matched
+
+      status.value = (matched) ? 'Matched!' : 'Mismatch'
+
+      cardList.value[cardOne.position].visible = matched
+      cardList.value[cardTwo.position].visible = matched
+
+      userSelection.value.length = 0
+    }, {
+      deep: true,
+    })
+
+    return { cardList, flipCard, userSelection, status }
   },
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="card" @click="selectCard">
     <div v-if="visible" class="card-face is-front">
-      {{ value }}
+      {{ value }} - {{ matched }}
     </div>
     <div v-else class="card-face is-back">Back</div>
   </div>
@@ -14,6 +14,7 @@ type TSelectCard = () => void
 
 export interface ISelectCardPayload {
   position: number,
+  faceValue: number,
 }
 
 export default defineComponent({
@@ -31,6 +32,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    matched: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,6 +45,7 @@ export default defineComponent({
     const selectCard: TSelectCard = () => {
       emit('select-card', {
         position: props.position,
+        faceValue: props.value,
       })
     }
 
