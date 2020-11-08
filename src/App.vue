@@ -1,5 +1,6 @@
 <template>
-  <h1>Peek-a-Vue</h1>
+  <h1 class="sr-only">Peek-a-Vue</h1>
+  <img class="title" src="/images/peek-a-vue-title.png" alt="Peek-a-Vue" />
   <section class="game-board">
     <Card
       v-for="(card, index) in cardList"
@@ -12,7 +13,10 @@
     />
   </section>
   <h2>{{ status }}</h2>
-  <button @click="restartGame">Restart Game</button>
+  <button class="button" @click="restartGame">
+    <img src="/images/restart.svg" alt="Restart Icon" />
+    Restart Game
+  </button>
 </template>
 
 <script lang="ts">
@@ -23,7 +27,7 @@ import { computed, defineComponent, ref, watch } from 'vue'
 
 interface ICard {
   position: number,
-  value: number,
+  value: string,
   visible?: boolean,
   matched?: boolean,
 }
@@ -62,7 +66,16 @@ export default defineComponent({
       })
     }
 
-    const cardItems: number[] = [1, 2, 3, 4, 5, 6, 7, 8]
+    const cardItems: string[] = [
+      'bat',
+      'candy',
+      'cauldron',
+      'cupcake',
+      'ghost',
+      'moon',
+      'pumpkin',
+      'witch-hat',
+    ]
 
     for (let i = 0; i < 16; i++) {
       const cardItemIndex = i % 8
@@ -153,15 +166,57 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  min-height: calc(100vh - 120px);
+  padding: 60px 0;
   text-align: center;
+  background-image: url('/images/page-bg.png');
+  background-color: #00070c;
+  color: white;
 }
 
 .game-board {
   display: grid;
-  grid-template: repeat(4, 100px) / repeat(4, 100px);
-  gap: 30px;
+  grid-template: repeat(4, 120px) / repeat(4, 120px);
+  gap: 24px;
   justify-content: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.title {
+  padding-bottom: 30px;
+}
+
+.button {
+  cursor: pointer;
+  background-color: orange;
+  color: white;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-weight: bold;
+
+  img {
+    padding-right: 5px;
+  }
 }
 </style>

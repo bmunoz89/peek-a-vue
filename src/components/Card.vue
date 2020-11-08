@@ -1,9 +1,10 @@
 <template>
   <div class="card" @click="selectCard">
     <div v-if="visible" class="card-face is-front">
-      {{ value }} - {{ matched }}
+      <img :src="`/images/${value}.png`" :alt="value" />
+      <img class="icon-checkmark" v-if="matched" src="/images/checkmark.svg" />
     </div>
-    <div v-else class="card-face is-back">Back</div>
+    <div v-else class="card-face is-back"></div>
   </div>
 </template>
 
@@ -14,7 +15,7 @@ type TSelectCard = () => void
 
 export interface ISelectCardPayload {
   position: number,
-  faceValue: number,
+  faceValue: string,
 }
 
 export default defineComponent({
@@ -25,7 +26,7 @@ export default defineComponent({
       required: true,
     },
     value: {
-      type: Number,
+      type: String,
       required: true,
     },
     visible: {
@@ -56,7 +57,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .card {
-  border: 5px solid #ccc;
   text-align: center;
   position: relative;
 
@@ -64,14 +64,22 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     position: absolute;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
 
     &.is-front {
-      background-color: red;
-      color: white;
+      background-image: url('/images/card-bg.png');
+
+      .icon-checkmark {
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+      }
     }
     &.is-back {
-      background-color: blue;
-      color: white;
+      background-image: url('/images/card-bg-empty.png');
     }
   }
 }
