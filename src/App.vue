@@ -1,6 +1,10 @@
 <template>
   <h1 class="sr-only">Peek-a-Vue</h1>
   <img class="title" src="/images/peek-a-vue-title.png" alt="Peek-a-Vue" />
+  <section class="description">
+    <p>Welcome to Peek-A-Vue!</p>
+    <p>A card matching game powered by Vue.js 3</p>
+  </section>
   <transition-group tag="section" class="game-board" name="shuffle-card">
     <Card
       v-for="card in cardList"
@@ -12,8 +16,12 @@
       @select-card="flipCard"
     />
   </transition-group>
-  <h2>{{ status }}</h2>
-  <button class="button" @click="restartGame">
+  <h2 class="status">{{ status }}</h2>
+  <button v-if="newPlayer" class="button" @click="startGame">
+    <img src="/images/play.svg" alt="Start Icon" />
+    Start Game
+  </button>
+  <button v-else class="button" @click="restartGame">
     <img src="/images/restart.svg" alt="Restart Icon" />
     Restart Game
   </button>
@@ -42,6 +50,14 @@ export default defineComponent({
   setup() {
     const cardList = ref<ICard[]>([])
     const userSelection = ref<ISelectCardPayload[]>([])
+    const newPlayer = ref<boolean>(true)
+
+    const startGame = () => {
+      newPlayer.value = false
+
+      restartGame()
+    }
+
     const status = computed(() => {
       return (remainingPairs.value === 0)
         ? 'Player wins'
@@ -82,6 +98,7 @@ export default defineComponent({
         key: i,
         value: cardItems[cardItemIndex],
         position: i,
+        visible: true,
       })
     }
 
@@ -89,6 +106,8 @@ export default defineComponent({
     let flippingCardTimeout: number
 
     const flipCard = (payload: ISelectCardPayload): void => {
+      if (newPlayer.value) return
+
       if (payload.matched) return
 
       if (userSelection.value.length === 2 && flippingCard) {
@@ -166,6 +185,8 @@ export default defineComponent({
       flipCard,
       userSelection,
       status,
+      newPlayer,
+      startGame,
       restartGame,
     }
   },
@@ -211,16 +232,35 @@ body {
   padding-bottom: 30px;
 }
 
+.description {
+  font-family: 'Titillium Web', sans-serif;
+  p {
+    margin: 0;
+    font-size: 1.2rem;
+
+    &:last-child {
+      margin-bottom: 30px;
+    }
+  }
+}
+
+.status {
+  font-family: 'Titillium Web', sans-serif;
+}
+
 .button {
   cursor: pointer;
   background-color: orange;
   color: white;
-  padding: 0.75rem 0.5rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
   font-weight: bold;
+  font-size: 1.1rem;
+  border: 0;
+  border-radius: 10px;
 
   img {
     padding-right: 5px;
