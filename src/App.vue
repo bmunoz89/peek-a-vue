@@ -24,6 +24,7 @@ import { shuffle } from 'lodash'
 import type { ISelectCardPayload } from '@/components/Card.vue'
 import Card from '@/components/Card.vue'
 import { computed, defineComponent, ref, watch } from 'vue'
+import { launchConfetti } from '@/utilities/confetti'
 
 interface ICard {
   position: number,
@@ -131,6 +132,12 @@ export default defineComponent({
       flippingCard = true
       flippingCardTimeout = setTimeout(hideCards, delay)
     }
+
+    watch(remainingPairs, (currentValue) => {
+      if (currentValue !== 0) return
+
+      launchConfetti()
+    })
 
     watch(userSelection, (currentValue) => {
       if (currentValue.length !== 2) return
