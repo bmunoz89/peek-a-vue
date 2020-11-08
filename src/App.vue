@@ -1,17 +1,17 @@
 <template>
   <h1 class="sr-only">Peek-a-Vue</h1>
   <img class="title" src="/images/peek-a-vue-title.png" alt="Peek-a-Vue" />
-  <section class="game-board">
+  <transition-group tag="section" class="game-board" name="shuffle-card">
     <Card
-      v-for="(card, index) in cardList"
-      :key="`card-${index}`"
+      v-for="card in cardList"
+      :key="card.key"
       :position="card.position"
       :value="card.value"
       :visible="card.visible"
       :matched="card.matched"
       @select-card="flipCard"
     />
-  </section>
+  </transition-group>
   <h2>{{ status }}</h2>
   <button class="button" @click="restartGame">
     <img src="/images/restart.svg" alt="Restart Icon" />
@@ -28,6 +28,7 @@ import { computed, defineComponent, ref, watch } from 'vue'
 interface ICard {
   position: number,
   value: string,
+  key: number,
   visible?: boolean,
   matched?: boolean,
 }
@@ -52,12 +53,8 @@ export default defineComponent({
       return remainingCards / 2
     })
 
-    const shuffleCards = () => {
-      cardList.value = shuffle(cardList.value)
-    }
-
     const restartGame = () => {
-      shuffleCards()
+      cardList.value = shuffle(cardList.value)
 
       cardList.value.forEach((card, index) => {
         card.position = index
@@ -81,6 +78,7 @@ export default defineComponent({
       const cardItemIndex = i % 8
 
       cardList.value.push({
+        key: i,
         value: cardItems[cardItemIndex],
         position: i,
       })
@@ -218,5 +216,9 @@ body {
   img {
     padding-right: 5px;
   }
+}
+
+.shuffle-card-move {
+  transition: transform ease-in 0.8s;
 }
 </style>
