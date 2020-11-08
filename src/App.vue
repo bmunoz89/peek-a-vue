@@ -73,7 +73,16 @@ export default defineComponent({
       })
     }
 
-    const flipCard = (payload: ISelectCardPayload) => {
+    let flippingCard = false
+    let flippingCardTimeout: number
+
+    const flipCard = (payload: ISelectCardPayload): void => {
+      if (userSelection.value.length === 2 && flippingCard) {
+        clearTimeout(flippingCardTimeout)
+        flippingCard = false
+        flipBack()
+      }
+
       switch (userSelection.value.length) {
 
       case 0:
@@ -91,6 +100,25 @@ export default defineComponent({
       }
     }
 
+    const flipBack = (delay = 0): void => {
+      const cardOne = userSelection.value[0]
+      const cardTwo = userSelection.value[1]
+      const hideCards = () => {
+        cardList.value[cardOne.position].visible = false
+        cardList.value[cardTwo.position].visible = false
+
+        userSelection.value.length = 0
+
+        flippingCard = false
+      }
+
+      if (delay === 0)
+        return hideCards()
+
+      flippingCard = true
+      flippingCardTimeout = setTimeout(hideCards, delay)
+    }
+
     watch(userSelection, (currentValue) => {
       if (currentValue.length !== 2) return
 
@@ -101,10 +129,14 @@ export default defineComponent({
       cardList.value[cardOne.position].matched = matched
       cardList.value[cardTwo.position].matched = matched
 
-      cardList.value[cardOne.position].visible = matched
-      cardList.value[cardTwo.position].visible = matched
+      if (matched) {
+        cardList.value[cardOne.position].visible = true
+        cardList.value[cardTwo.position].visible = true
 
-      userSelection.value.length = 0
+        userSelection.value.length = 0
+      } else {
+        flipBack(1000)
+      }
     }, {
       deep: true,
     })
