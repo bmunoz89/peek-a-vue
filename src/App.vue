@@ -12,7 +12,7 @@
     />
   </section>
   <h2>{{ status }}</h2>
-  <button @click="shuffleCards">Shuffle Cards</button>
+  <button @click="restartGame">Restart Game</button>
 </template>
 
 <script lang="ts">
@@ -52,10 +52,20 @@ export default defineComponent({
       cardList.value = shuffle(cardList.value)
     }
 
+    const restartGame = () => {
+      shuffleCards()
+
+      cardList.value.forEach((card, index) => {
+        card.position = index
+        card.visible = false
+        card.matched = false
+      })
+    }
+
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
         position: i,
-        value: i,
+        value: i % 8,
       })
     }
 
@@ -91,7 +101,7 @@ export default defineComponent({
       flipCard,
       userSelection,
       status,
-      shuffleCards,
+      restartGame,
     }
   },
 })
