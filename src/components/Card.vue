@@ -1,15 +1,15 @@
 <template>
-  <div class="card" @click="selectCard">
-    <div v-if="visible" class="card-face is-front">
+  <div class="card" :class="flippedStyles" @click="selectCard">
+    <div class="card-face is-front">
       <img :src="`/images/${value}.png`" :alt="value" />
       <img class="icon-checkmark" v-if="matched" src="/images/checkmark.svg" />
     </div>
-    <div v-else class="card-face is-back"></div>
+    <div class="card-face is-back"></div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 type TSelectCard = () => void
 
@@ -43,6 +43,11 @@ export default defineComponent({
     'select-card': (payload: ISelectCardPayload) => true,
   },
   setup(props, { emit }) {
+    const flippedStyles = computed(() => {
+      if (props.visible)
+        return 'is-flipped'
+    })
+
     const selectCard: TSelectCard = () => {
       emit('select-card', {
         position: props.position,
@@ -50,7 +55,10 @@ export default defineComponent({
       })
     }
 
-    return { selectCard }
+    return {
+      selectCard,
+      flippedStyles,
+    }
   },
 })
 </script>
@@ -59,6 +67,8 @@ export default defineComponent({
 .card {
   text-align: center;
   position: relative;
+  transition: transform ease-in-out 0.8s;
+  transform-style: preserve-3d;
 
   .card-face {
     width: 100%;
@@ -68,9 +78,11 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-content: center;
+    backface-visibility: hidden;
 
     &.is-front {
       background-image: url('/images/card-bg.png');
+      transform: rotateY(180deg);
 
       .icon-checkmark {
         position: absolute;
@@ -81,6 +93,10 @@ export default defineComponent({
     &.is-back {
       background-image: url('/images/card-bg-empty.png');
     }
+  }
+
+  &.is-flipped {
+    transform: rotateY(180deg);
   }
 }
 </style>
