@@ -1,10 +1,16 @@
 <template>
-  <div class="card" :class="flippedStyles" @click="selectCard">
-    <div class="card-face is-front">
-      <img :src="`/images/${value}.png`" :alt="value" />
-      <img class="icon-checkmark" v-if="matched" src="/images/checkmark.svg" />
+  <div class="outer-card">
+    <div class="card" :class="flippedStyles" @click="selectCard">
+      <div class="card-face is-front">
+        <img :src="`/images/${value}.png`" :alt="value" />
+        <img
+          class="icon-checkmark"
+          v-if="matched"
+          src="/images/checkmark.svg"
+        />
+      </div>
+      <div class="card-face is-back"></div>
     </div>
-    <div class="card-face is-back"></div>
   </div>
 </template>
 
@@ -64,6 +70,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.outer-card {
+  display: grid;
+  perspective: 1000px;
+}
+
 .card {
   text-align: center;
   position: relative;
@@ -74,11 +85,13 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     position: absolute;
+    border: 1px solid black;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-content: center;
     backface-visibility: hidden;
+    transition: border-color ease-in-out 0.8s;
 
     &.is-front {
       background-image: url('/images/card-bg.png');
@@ -97,6 +110,10 @@ export default defineComponent({
 
   &.is-flipped {
     transform: rotateY(180deg);
+
+    .card-face {
+      border-color: #690ba8;
+    }
   }
 }
 </style>
