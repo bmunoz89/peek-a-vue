@@ -74,12 +74,21 @@ export default defineComponent({
     }
 
     const flipCard = (payload: ISelectCardPayload) => {
-      cardList.value[payload.position].visible = true
+      switch (userSelection.value.length) {
 
-      if (userSelection.value[0])
-        userSelection.value[1] = payload
-      else
+      case 0:
         userSelection.value[0] = payload
+        cardList.value[payload.position].visible = true
+        break
+      case 1:
+        if (userSelection.value[0].position !== payload.position) {
+          userSelection.value[1] = payload
+          cardList.value[payload.position].visible = true
+        }
+
+        break
+
+      }
     }
 
     watch(userSelection, (currentValue) => {
