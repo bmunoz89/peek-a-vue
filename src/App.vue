@@ -12,9 +12,11 @@
     />
   </section>
   <h2>{{ status }}</h2>
+  <button @click="shuffleCards">Shuffle Cards</button>
 </template>
 
 <script lang="ts">
+import { shuffle } from 'lodash'
 import type { ISelectCardPayload } from '@/components/Card.vue'
 import Card from '@/components/Card.vue'
 import { computed, defineComponent, ref, watch } from 'vue'
@@ -45,6 +47,10 @@ export default defineComponent({
 
       return remainingCards / 2
     })
+
+    const shuffleCards = () => {
+      cardList.value = shuffle(cardList.value)
+    }
 
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
@@ -85,6 +91,7 @@ export default defineComponent({
       flipCard,
       userSelection,
       status,
+      shuffleCards,
     }
   },
 })
