@@ -88,6 +88,8 @@ export default defineComponent({
     let flippingCardTimeout: number
 
     const flipCard = (payload: ISelectCardPayload): void => {
+      if (payload.matched) return
+
       if (userSelection.value.length === 2 && flippingCard) {
         clearTimeout(flippingCardTimeout)
         flippingCard = false

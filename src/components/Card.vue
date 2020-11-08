@@ -21,6 +21,7 @@ type TSelectCard = () => void
 
 export interface ISelectCardPayload {
   position: number,
+  matched: boolean,
   faceValue: string,
 }
 
@@ -57,6 +58,7 @@ export default defineComponent({
     const selectCard: TSelectCard = () => {
       emit('select-card', {
         position: props.position,
+        matched: props.matched,
         faceValue: props.value,
       })
     }
