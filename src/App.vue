@@ -17,7 +17,7 @@
 <script lang="ts">
 import type { ISelectCardPayload } from '@/components/Card.vue'
 import Card from '@/components/Card.vue'
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 
 interface ICard {
   position: number,
@@ -34,7 +34,17 @@ export default defineComponent({
   setup() {
     const cardList = ref<ICard[]>([])
     const userSelection = ref<ISelectCardPayload[]>([])
-    const status = ref<string>('')
+    const status = computed(() => {
+      return (remainingPairs.value === 0)
+        ? 'Player wins'
+        : `Remaining Pairs: ${remainingPairs.value}`
+    })
+    const remainingPairs = computed(() => {
+      const remainingCards = cardList.value
+        .filter((card) => card.matched !== true).length
+
+      return remainingCards / 2
+    })
 
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
@@ -62,8 +72,6 @@ export default defineComponent({
       cardList.value[cardOne.position].matched = matched
       cardList.value[cardTwo.position].matched = matched
 
-      status.value = (matched) ? 'Matched!' : 'Mismatch'
-
       cardList.value[cardOne.position].visible = matched
       cardList.value[cardTwo.position].visible = matched
 
@@ -72,7 +80,12 @@ export default defineComponent({
       deep: true,
     })
 
-    return { cardList, flipCard, userSelection, status }
+    return {
+      cardList,
+      flipCard,
+      userSelection,
+      status,
+    }
   },
 })
 </script>
