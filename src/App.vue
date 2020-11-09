@@ -7,8 +7,44 @@
     alt="Peek-a-Vue"
   />
   <section class="description">
-    <p>Welcome to Peek-A-Vue!</p>
-    <p>A card matching game powered by Vue.js 3</p>
+    <p>Welcome to Peek-a-Vue, a Halloween themed card matching game!</p>
+    <p class="powered-wrapper">
+      Powered by
+      <a class="powered-link" href="https://v3.vuejs.org/" target="_blank">
+        <img
+          class="powered-logo"
+          src="/images/vue-logo.svg"
+          alt="Vue.js logo"
+        />
+        Vue.js 3
+      </a>
+      <span>, </span>
+      <a
+        class="powered-link"
+        href="https://www.netlify.com/?utm_source=github&utm_medium=peekavue-bh&utm_campaign=devex"
+        target="_blank"
+      >
+        <img
+          class="powered-logo"
+          src="/images/netliheart.svg"
+          alt="Netlify Heart Logo"
+        />
+        Netlify
+      </a>
+      <span> & </span>
+      <a
+        class="powered-link"
+        href="https://github.com/bmunoz89/peek-a-vue"
+        target="_blank"
+      >
+        <img
+          class="powered-logo"
+          src="/images/github-logo.svg"
+          alt="GitHub Logo"
+        />
+        GitHub</a
+      >
+    </p>
   </section>
   <button v-if="newPlayer" class="button" @click="startGame">
     <img src="/images/play.svg" alt="Start Icon" />
@@ -205,6 +241,14 @@ body {
   padding: 0;
 }
 
+a {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -246,7 +290,29 @@ body {
     font-size: 1rem;
 
     &:last-child {
+      margin-top: 10px;
       margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+  }
+
+  .powered-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+
+    .powered-link {
+      padding: 0 5px;
+
+      &:first-child,
+      &:last-child {
+        padding-right: 0;
+      }
+
+      .powered-logo {
+        width: 18px;
+      }
     }
   }
 }
