@@ -263,7 +263,7 @@ a:hover {
 
 .game-board {
   display: grid;
-  grid-template: repeat(4, 120px) / repeat(4, 120px);
+  grid-template: repeat(4, 70px) / repeat(4, 70px);
   gap: 12px;
   justify-content: center;
 }
@@ -343,5 +343,16 @@ a:hover {
 
 .shuffle-card-move {
   transition: transform ease-in 0.8s;
+}
+
+@media screen and (min-width: 500px) {
+  .game-board {
+    grid-template: repeat(4, 100px) / repeat(4, 100px);
+  }
+}
+@media screen and (min-width: 600px) {
+  .game-board {
+    grid-template: repeat(4, 120px) / repeat(4, 120px);
+  }
 }
 </style>
