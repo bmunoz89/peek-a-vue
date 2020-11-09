@@ -207,6 +207,8 @@ body {
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: calc(100vh - 120px);
   padding: 60px 0;
   text-align: center;
@@ -218,7 +220,7 @@ body {
 .game-board {
   display: grid;
   grid-template: repeat(4, 120px) / repeat(4, 120px);
-  gap: 24px;
+  gap: 12px;
   justify-content: center;
 }
 
@@ -241,7 +243,7 @@ body {
   font-family: 'Titillium Web', sans-serif;
   p {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1rem;
 
     &:last-child {
       margin-bottom: 30px;
@@ -258,13 +260,13 @@ body {
   cursor: pointer;
   background-color: #e78805;
   color: white;
-  padding: 0.75rem 1rem;
+  padding: 8px 16px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 30px;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: bold;
+  font-size: 1rem;
   border: 2px solid #e78805;
   border-radius: 10px;
 
