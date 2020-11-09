@@ -10,7 +10,9 @@
         />
         <img
           class="icon-checkmark"
-          v-if="matched"
+          :class="{
+            show: matched,
+          }"
           src="/images/checkmark.svg"
         />
       </div>
@@ -105,6 +107,12 @@ export default defineComponent({
         position: absolute;
         right: 5px;
         bottom: 5px;
+        opacity: 0;
+        transition: opacity ease-in-out 0.3s 0.4s;
+
+        &.show {
+          opacity: 1;
+        }
       }
     }
     &.is-back {
