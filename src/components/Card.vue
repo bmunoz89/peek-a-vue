@@ -2,7 +2,11 @@
   <div class="outer-card">
     <div class="card" :class="flippedStyles" @click="selectCard">
       <div class="card-face is-front">
-        <img :src="`/images/${value}.png`" :alt="value" />
+        <img
+          :src="`/images/${value}.png`"
+          :srcset="`/images/${value}@2x.png 2x`"
+          :alt="value"
+        />
         <img
           class="icon-checkmark"
           v-if="matched"

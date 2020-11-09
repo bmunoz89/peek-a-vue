@@ -1,6 +1,11 @@
 <template>
   <h1 class="sr-only">Peek-a-Vue</h1>
-  <img class="title" src="/images/peek-a-vue-title.png" alt="Peek-a-Vue" />
+  <img
+    class="title"
+    src="/images/peek-a-vue-title.png"
+    srcset="/images/peek-a-vue-title@2x.png 2x"
+    alt="Peek-a-Vue"
+  />
   <section class="description">
     <p>Welcome to Peek-A-Vue!</p>
     <p>A card matching game powered by Vue.js 3</p>
@@ -249,6 +254,7 @@ body {
 }
 
 .button {
+  font-family: 'Titillium Web', sans-serif;
   cursor: pointer;
   background-color: #e78805;
   color: white;
@@ -257,9 +263,9 @@ body {
   align-items: center;
   justify-content: center;
   margin: 0 auto 30px;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 1.1rem;
-  border: 0;
+  border: 2px solid #e78805;
   border-radius: 10px;
 
   img {
