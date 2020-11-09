@@ -3,6 +3,7 @@
     <div class="card" :class="flippedStyles" @click="selectCard">
       <div class="card-face is-front">
         <img
+          class="card-img"
           :src="`/images/${value}.png`"
           :srcset="`/images/${value}@2x.png 2x`"
           :alt="value"
@@ -93,9 +94,6 @@ export default defineComponent({
     position: absolute;
     border: 1px solid black;
     border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
     backface-visibility: hidden;
     transition: border-color ease-in-out 0.8s;
 
@@ -111,6 +109,11 @@ export default defineComponent({
     }
     &.is-back {
       background-image: url('/images/card-bg-empty.png');
+    }
+
+    .card-img {
+      height: 100%;
+      width: 100%;
     }
   }
 
