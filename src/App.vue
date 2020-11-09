@@ -241,6 +241,14 @@ body {
   padding: 0;
 }
 
+button:active {
+  outline: none;
+}
+
+button:focus {
+  outline: 0;
+}
+
 a {
   color: white;
   text-decoration: none;
