@@ -69,12 +69,12 @@
 </template>
 
 <script lang="ts">
-import { shuffle } from 'lodash'
 import type { ISelectCardPayload } from '@/components/Card.vue'
 import Card from '@/components/Card.vue'
-import { computed, defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { launchConfetti } from '@/utilities/confetti'
 import createDeck from '@/features/createDeck'
+import createGame from '@/features/createGame'
 
 export default defineComponent({
   name: 'App',
@@ -83,36 +83,14 @@ export default defineComponent({
   },
   setup() {
     const { cardList } = createDeck(16)
+    const {
+      newPlayer,
+      startGame,
+      restartGame,
+      status,
+      remainingPairs,
+    } = createGame(cardList)
     const userSelection = ref<ISelectCardPayload[]>([])
-    const newPlayer = ref<boolean>(true)
-
-    const startGame = () => {
-      newPlayer.value = false
-
-      restartGame()
-    }
-
-    const status = computed(() => {
-      return (remainingPairs.value === 0)
-        ? 'Player wins'
-        : `Remaining Pairs: ${remainingPairs.value}`
-    })
-    const remainingPairs = computed(() => {
-      const remainingCards = cardList.value
-        .filter((card) => card.matched !== true).length
-
-      return remainingCards / 2
-    })
-
-    const restartGame = () => {
-      cardList.value = shuffle(cardList.value)
-
-      cardList.value.forEach((card, index) => {
-        card.position = index
-        card.visible = false
-        card.matched = false
-      })
-    }
 
     let flippingCard = false
     let flippingCardTimeout: number
