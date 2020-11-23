@@ -74,14 +74,7 @@ import type { ISelectCardPayload } from '@/components/Card.vue'
 import Card from '@/components/Card.vue'
 import { computed, defineComponent, ref, watch } from 'vue'
 import { launchConfetti } from '@/utilities/confetti'
-
-interface ICard {
-  position: number,
-  value: string,
-  key: number,
-  visible?: boolean,
-  matched?: boolean,
-}
+import createDeck from '@/features/createDeck'
 
 export default defineComponent({
   name: 'App',
@@ -89,7 +82,7 @@ export default defineComponent({
     Card,
   },
   setup() {
-    const cardList = ref<ICard[]>([])
+    const { cardList } = createDeck(16)
     const userSelection = ref<ISelectCardPayload[]>([])
     const newPlayer = ref<boolean>(true)
 
@@ -118,28 +111,6 @@ export default defineComponent({
         card.position = index
         card.visible = false
         card.matched = false
-      })
-    }
-
-    const cardItems: string[] = [
-      'bat',
-      'candy',
-      'cauldron',
-      'cupcake',
-      'ghost',
-      'moon',
-      'pumpkin',
-      'witch-hat',
-    ]
-
-    for (let i = 0; i < 16; i++) {
-      const cardItemIndex = i % 8
-
-      cardList.value.push({
-        key: i,
-        value: cardItems[cardItemIndex],
-        position: i,
-        visible: true,
       })
     }
 
