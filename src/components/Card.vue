@@ -21,8 +21,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
+<script lang="ts" setup="props, { emit }">
+import { computed } from 'vue'
 
 type TSelectCard = () => void
 
@@ -32,8 +32,14 @@ export interface ISelectCardPayload {
   faceValue: string,
 }
 
-export default defineComponent({
-  name: 'Card',
+declare const props: {
+  position: number,
+  value: string,
+  visible: boolean,
+  matched: boolean,
+}
+
+export default {
   props: {
     position: {
       type: Number,
@@ -52,30 +58,28 @@ export default defineComponent({
       default: false,
     },
   },
-  emits: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    'select-card': (payload: ISelectCardPayload) => true,
-  },
-  setup(props, { emit }) {
-    const flippedStyles = computed(() => {
-      if (props.visible)
-        return 'is-flipped'
-    })
+}
 
-    const selectCard: TSelectCard = () => {
-      emit('select-card', {
-        position: props.position,
-        matched: props.matched,
-        faceValue: props.value,
-      })
-    }
-
-    return {
-      selectCard,
-      flippedStyles,
-    }
-  },
+export const flippedStyles = computed(() => {
+  if (props.visible)
+    return 'is-flipped'
 })
+
+interface IEmits {
+  'select-card': ISelectCardPayload
+}
+
+declare function emit<
+  T extends keyof IEmits
+>(name: T, attribute: IEmits[T]): void
+
+export const selectCard: TSelectCard = () => {
+  emit('select-card', {
+    position: props.position,
+    matched: props.matched,
+    faceValue: props.value,
+  })
+}
 </script>
 
 <style lang="scss" scoped>

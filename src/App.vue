@@ -68,118 +68,103 @@
   <h2 class="status">{{ status }}</h2>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+export { default as Card } from '@/components/Card.vue'
+
 import type { ISelectCardPayload } from '@/components/Card.vue'
-import Card from '@/components/Card.vue'
-import { defineComponent, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { launchConfetti } from '@/utilities/confetti'
 import createDeck from '@/features/createDeck'
 import createGame from '@/features/createGame'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    Card,
-  },
-  setup() {
-    const { cardList } = createDeck(16)
-    const {
-      newPlayer,
-      startGame,
-      restartGame,
-      status,
-      remainingPairs,
-    } = createGame(cardList)
-    const userSelection = ref<ISelectCardPayload[]>([])
+export const { cardList } = createDeck(16)
 
-    let flippingCard = false
-    let flippingCardTimeout: number
+export const {
+  newPlayer,
+  startGame,
+  restartGame,
+  status,
+  remainingPairs,
+} = createGame(cardList)
 
-    const flipCard = (payload: ISelectCardPayload): void => {
-      if (newPlayer.value) return
+const userSelection = ref<ISelectCardPayload[]>([])
 
-      if (payload.matched) return
+let flippingCard = false
+let flippingCardTimeout: number
 
-      if (userSelection.value.length === 2 && flippingCard) {
-        clearTimeout(flippingCardTimeout)
-        flippingCard = false
-        flipBack()
-      }
+export const flipCard = (payload: ISelectCardPayload): void => {
+  if (newPlayer.value) return
 
-      switch (userSelection.value.length) {
+  if (payload.matched) return
 
-      case 0:
-        userSelection.value[0] = payload
-        cardList.value[payload.position].visible = true
-        break
-      case 1:
-        if (userSelection.value[0].position !== payload.position) {
-          userSelection.value[1] = payload
-          cardList.value[payload.position].visible = true
-        }
+  if (userSelection.value.length === 2 && flippingCard) {
+    clearTimeout(flippingCardTimeout)
+    flippingCard = false
+    flipBack()
+  }
 
-        break
+  switch (userSelection.value.length) {
 
-      }
+  case 0:
+    userSelection.value[0] = payload
+    cardList.value[payload.position].visible = true
+    break
+  case 1:
+    if (userSelection.value[0].position !== payload.position) {
+      userSelection.value[1] = payload
+      cardList.value[payload.position].visible = true
     }
 
-    const flipBack = (delay = 0): void => {
-      const cardOne = userSelection.value[0]
-      const cardTwo = userSelection.value[1]
-      const hideCards = () => {
-        cardList.value[cardOne.position].visible = false
-        cardList.value[cardTwo.position].visible = false
+    break
 
-        userSelection.value.length = 0
+  }
+}
 
-        flippingCard = false
-      }
+export const flipBack = (delay = 0): void => {
+  const cardOne = userSelection.value[0]
+  const cardTwo = userSelection.value[1]
+  const hideCards = () => {
+    cardList.value[cardOne.position].visible = false
+    cardList.value[cardTwo.position].visible = false
 
-      if (delay === 0)
-        return hideCards()
+    userSelection.value.length = 0
 
-      flippingCard = true
-      flippingCardTimeout = setTimeout(hideCards, delay)
-    }
+    flippingCard = false
+  }
 
-    watch(remainingPairs, (currentValue) => {
-      if (currentValue !== 0) return
+  if (delay === 0)
+    return hideCards()
 
-      launchConfetti()
-    })
+  flippingCard = true
+  flippingCardTimeout = setTimeout(hideCards, delay)
+}
 
-    watch(userSelection, (currentValue) => {
-      if (currentValue.length !== 2) return
+watch(remainingPairs, (currentValue) => {
+  if (currentValue !== 0) return
 
-      const cardOne = currentValue[0]
-      const cardTwo = currentValue[1]
-      const matched = cardOne.faceValue === cardTwo.faceValue
+  launchConfetti()
+})
 
-      cardList.value[cardOne.position].matched = matched
-      cardList.value[cardTwo.position].matched = matched
+watch(userSelection, (currentValue) => {
+  if (currentValue.length !== 2) return
 
-      if (matched) {
-        cardList.value[cardOne.position].visible = true
-        cardList.value[cardTwo.position].visible = true
+  const cardOne = currentValue[0]
+  const cardTwo = currentValue[1]
+  const matched = cardOne.faceValue === cardTwo.faceValue
 
-        userSelection.value.length = 0
-      } else {
-        flipBack(1000)
-      }
-    }, {
-      deep: true,
-    })
+  cardList.value[cardOne.position].matched = matched
+  cardList.value[cardTwo.position].matched = matched
 
-    return {
-      cardList,
-      flipCard,
-      userSelection,
-      status,
-      newPlayer,
-      startGame,
-      restartGame,
-    }
-  },
+  if (matched) {
+    cardList.value[cardOne.position].visible = true
+    cardList.value[cardTwo.position].visible = true
+
+    userSelection.value.length = 0
+  } else {
+    flipBack(1000)
+  }
+}, {
+  deep: true,
 })
 </script>
 
