@@ -1,4 +1,4 @@
-import { shuffle } from 'lodash'
+import shuffle from 'lodash/shuffle'
 import type { ComputedRef, Ref } from 'vue'
 import { computed, ref } from 'vue'
 import type { ICard } from './createDeck'
