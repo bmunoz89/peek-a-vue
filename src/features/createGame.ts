@@ -31,8 +31,9 @@ const restartGame = (): void => {
 }
 
 const remainingPairs: ComputedRef<number> = computed(() => {
-  const remainingCards = deck.value.filter((card) => card.matched !== true)
-    .length
+  const remainingCards = deck.value.filter(
+    (card) => card.matched !== true,
+  ).length
 
   return remainingCards / 2
 })

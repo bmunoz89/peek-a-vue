@@ -69,30 +69,24 @@
 </template>
 
 <script lang="ts" setup>
-export { default as Card } from '@/components/Card.vue'
-
+import Card from '@/components/Card.vue'
 import type { ISelectCardPayload } from '@/components/Card.vue'
 import { ref, watch } from 'vue'
 import { launchConfetti } from '@/utilities/confetti'
 import createDeck from '@/features/createDeck'
 import createGame from '@/features/createGame'
 
-export const { cardList } = createDeck(16)
+const { cardList } = createDeck(16)
 
-export const {
-  newPlayer,
-  startGame,
-  restartGame,
-  status,
-  remainingPairs,
-} = createGame(cardList)
+const { newPlayer, startGame, restartGame, status, remainingPairs } =
+  createGame(cardList)
 
 const userSelection = ref<ISelectCardPayload[]>([])
 
 let flippingCard = false
 let flippingCardTimeout: number
 
-export const flipCard = (payload: ISelectCardPayload): void => {
+const flipCard = (payload: ISelectCardPayload): void => {
   if (newPlayer.value) return
 
   if (payload.matched) return
@@ -104,23 +98,22 @@ export const flipCard = (payload: ISelectCardPayload): void => {
   }
 
   switch (userSelection.value.length) {
-
-  case 0:
-    userSelection.value[0] = payload
-    cardList.value[payload.position].visible = true
-    break
-  case 1:
-    if (userSelection.value[0].position !== payload.position) {
-      userSelection.value[1] = payload
+    case 0:
+      userSelection.value[0] = payload
       cardList.value[payload.position].visible = true
-    }
 
-    break
+      break
+    case 1:
+      if (userSelection.value[0].position !== payload.position) {
+        userSelection.value[1] = payload
+        cardList.value[payload.position].visible = true
+      }
 
+      break
   }
 }
 
-export const flipBack = (delay = 0): void => {
+const flipBack = (delay = 0): void => {
   const cardOne = userSelection.value[0]
   const cardTwo = userSelection.value[1]
   const hideCards = () => {
@@ -132,8 +125,7 @@ export const flipBack = (delay = 0): void => {
     flippingCard = false
   }
 
-  if (delay === 0)
-    return hideCards()
+  if (delay === 0) return hideCards()
 
   flippingCard = true
   flippingCardTimeout = setTimeout(hideCards, delay)
@@ -145,27 +137,31 @@ watch(remainingPairs, (currentValue) => {
   launchConfetti()
 })
 
-watch(userSelection, (currentValue) => {
-  if (currentValue.length !== 2) return
+watch(
+  userSelection,
+  (currentValue) => {
+    if (currentValue.length !== 2) return
 
-  const cardOne = currentValue[0]
-  const cardTwo = currentValue[1]
-  const matched = cardOne.faceValue === cardTwo.faceValue
+    const cardOne = currentValue[0]
+    const cardTwo = currentValue[1]
+    const matched = cardOne.faceValue === cardTwo.faceValue
 
-  cardList.value[cardOne.position].matched = matched
-  cardList.value[cardTwo.position].matched = matched
+    cardList.value[cardOne.position].matched = matched
+    cardList.value[cardTwo.position].matched = matched
 
-  if (matched) {
-    cardList.value[cardOne.position].visible = true
-    cardList.value[cardTwo.position].visible = true
+    if (matched) {
+      cardList.value[cardOne.position].visible = true
+      cardList.value[cardTwo.position].visible = true
 
-    userSelection.value.length = 0
-  } else {
-    flipBack(1000)
-  }
-}, {
-  deep: true,
-})
+      userSelection.value.length = 0
+    } else {
+      flipBack(1000)
+    }
+  },
+  {
+    deep: true,
+  },
+)
 </script>
 
 <style lang="scss">
@@ -187,6 +183,7 @@ a {
   color: white;
   text-decoration: none;
 }
+
 a:hover {
   text-decoration: underline;
 }
@@ -198,7 +195,7 @@ a:hover {
   min-height: calc(100vh - 120px);
   padding: 60px 0;
   text-align: center;
-  background-image: url('/images/page-bg.png');
+  background-image: url('/public/images/page-bg.png');
   background-color: #00070c;
   color: white;
 }
@@ -227,6 +224,7 @@ a:hover {
 
 .description {
   font-family: 'Titillium Web', sans-serif;
+
   p {
     margin: 0;
     font-size: 1rem;
@@ -292,6 +290,7 @@ a:hover {
     grid-template: repeat(4, 100px) / repeat(4, 100px);
   }
 }
+
 @media screen and (min-width: 600px) {
   .game-board {
     grid-template: repeat(4, 120px) / repeat(4, 120px);

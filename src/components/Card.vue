@@ -1,6 +1,6 @@
 <template>
   <div class="outer-card">
-    <div class="card" :class="flippedStyles" @click="selectCard">
+    <div class="card" :class="flippedStyles" @click="onSelectCardClick">
       <div class="card-face is-front">
         <img
           class="card-img"
@@ -21,59 +21,36 @@
   </div>
 </template>
 
-<script lang="ts" setup="props, { emit }">
+<script lang="ts" setup>
 import { computed } from 'vue'
 
-type TSelectCard = () => void
-
 export interface ISelectCardPayload {
-  position: number,
-  matched: boolean,
-  faceValue: string,
+  position: number
+  matched: boolean
+  faceValue: string
 }
 
-declare const props: {
-  position: number,
-  value: string,
-  visible: boolean,
-  matched: boolean,
+export interface Props {
+  position: number
+  value: string
+  visible?: boolean
+  matched?: boolean
 }
 
-export default {
-  props: {
-    position: {
-      type: Number,
-      required: true,
-    },
-    value: {
-      type: String,
-      required: true,
-    },
-    visible: {
-      type: Boolean,
-      default: false,
-    },
-    matched: {
-      type: Boolean,
-      default: false,
-    },
-  },
-}
-
-export const flippedStyles = computed(() => {
-  if (props.visible)
-    return 'is-flipped'
+const props = withDefaults(defineProps<Props>(), {
+  visible: false,
+  matched: false,
 })
 
-interface IEmits {
-  'select-card': ISelectCardPayload
-}
+const flippedStyles = computed(() => {
+  return props.visible ? 'is-flipped' : undefined
+})
 
-declare function emit<
-  T extends keyof IEmits
->(name: T, attribute: IEmits[T]): void
+const emit = defineEmits<{
+  'select-card': [ISelectCardPayload]
+}>()
 
-export const selectCard: TSelectCard = () => {
+const onSelectCardClick = () => {
   emit('select-card', {
     position: props.position,
     matched: props.matched,
@@ -104,7 +81,7 @@ export const selectCard: TSelectCard = () => {
     transition: border-color ease-in-out 0.8s;
 
     &.is-front {
-      background-image: url('/images/card-bg.png');
+      background-image: url('/public/images/card-bg.png');
       transform: rotateY(180deg);
 
       .icon-checkmark {
@@ -119,8 +96,9 @@ export const selectCard: TSelectCard = () => {
         }
       }
     }
+
     &.is-back {
-      background-image: url('/images/card-bg-empty.png');
+      background-image: url('/public/images/card-bg-empty.png');
     }
 
     .card-img {

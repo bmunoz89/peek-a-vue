@@ -8,7 +8,6 @@ module.exports = {
     'eslint:recommended',
     '@vue/typescript/recommended',
     '@vue/prettier',
-    '@vue/prettier/@typescript-eslint',
   ],
   parserOptions: {
     parser: '@typescript-eslint/parser',
@@ -51,7 +50,7 @@ module.exports = {
       },
     ],
     // enforce consistent indentation
-    'indent': ['error', 2],
+    'indent': ['error', 2, { SwitchCase: 1 }],
     // enforce a maximum line length
     'max-len': ['error', { code: 100 }],
     // enforce the consistent use of either backticks, double, or single quotes
@@ -120,7 +119,7 @@ module.exports = {
       {
         blocks: 'never',
         classes: 'always',
-        switches: 'always',
+        switches: 'never',
       },
     ],
     // require or disallow padding lines between statements
@@ -202,5 +201,11 @@ module.exports = {
      */
     // require or disallow padding lines between blocks
     'vue/padding-line-between-blocks': ['error', 'always'],
+    'vue/multi-word-component-names': [
+      'error',
+      {
+        ignores: ['Card'],
+      },
+    ],
   },
 }
