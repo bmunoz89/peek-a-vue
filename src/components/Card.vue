@@ -47,7 +47,7 @@ const flippedStyles = computed(() => {
 })
 
 const emit = defineEmits<{
-  'select-card': [ISelectCardPayload]
+  (event: 'select-card', payload: ISelectCardPayload): void
 }>()
 
 const onSelectCardClick = () => {
