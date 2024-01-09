@@ -8,7 +8,7 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     ".eslintrc.js",
-    "babel.config.js",
+    "vite.config.mts",
     "tsconfig.json",
   ],
 }

@@ -81,7 +81,7 @@ const onSelectCardClick = () => {
     transition: border-color ease-in-out 0.8s;
 
     &.is-front {
-      background-image: url('/public/images/card-bg.png');
+      background-image: url('/images/card-bg.png');
       transform: rotateY(180deg);
 
       .icon-checkmark {
@@ -98,7 +98,7 @@ const onSelectCardClick = () => {
     }
 
     &.is-back {
-      background-image: url('/public/images/card-bg-empty.png');
+      background-image: url('/images/card-bg-empty.png');
     }
 
     .card-img {

@@ -195,7 +195,7 @@ a:hover {
   min-height: calc(100vh - 120px);
   padding: 60px 0;
   text-align: center;
-  background-image: url('/public/images/page-bg.png');
+  background-image: url('/images/page-bg.png');
   background-color: #00070c;
   color: white;
 }
